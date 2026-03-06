@@ -1,38 +1,133 @@
-﻿.upload-container{
-    padding: 40px;
-    font-family: Arial, Helvetica, sans-serif;
+﻿/* Page Layout */
+.upload-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,#f3f5f9,#e6ebf2);
 }
 
-.drop-zone{
-    border: 2px dashed #999;
+/* Page Title */
+
+.upload-container h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Upload Card */
+
+.drop-zone {
+    width: 500px;
+    background: white;
+    border: 2px dashed #dcdcdc;
+    border-radius: 10px;
     padding: 40px;
     text-align: center;
-    margin-top: 20px;
-    border-radius: 6px;
-    background: #fafafa;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
 }
 
-.file-name{
-    margin-top: 10px;
-    font-weight: bold;
+    /* Hover effect */
+
+    .drop-zone:hover {
+        border-color: #e53935;
+        background: #fffafa;
+    }
+
+    /* Drag drop text */
+
+    .drop-zone p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    /* File input */
+
+    .drop-zone input {
+        margin-top: 10px;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+/* Selected file name */
+
+.file-name {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
 }
 
-.itemtype-section{
+/* ItemType Section */
+
+.itemtype-section {
+    width: 500px;
     margin-top: 25px;
+    display: flex;
+    flex-direction: column;
 }
 
-select{
-    margin-top: 8px;
-    padding: 8px;
-    width: 200px;
-}
+    /* Label */
 
-.next-btn{
+    .itemtype-section label {
+        font-size: 14px;
+        margin-bottom: 6px;
+        color: #555;
+    }
+
+    /* Dropdown */
+
+    .itemtype-section select {
+        padding: 11px;
+        font-size: 14px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        transition: all 0.2s ease;
+    }
+
+        /* Dropdown focus */
+
+        .itemtype-section select:focus {
+            outline: none;
+            border-color: #e53935;
+            box-shadow: 0 0 3px rgba(229,57,53,0.4);
+        }
+
+/* Next Button */
+
+.next-btn {
+    width: 500px;
     margin-top: 30px;
-    padding: 10px 18px;
-    background:#1976d2;
-    border: none;
+    padding: 12px;
+    background: #e53935;
     color: white;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
     border-radius: 6px;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    /* Button hover */
+
+    .next-btn:hover {
+        background: #d32f2f;
+    }
+
+/* Responsive */
+
+@media (max-width:600px) {
+
+    .drop-zone,
+    .itemtype-section,
+    .next-btn {
+        width: 90%;
+    }
 }

@@ -1,67 +1,124 @@
-﻿.dashboard-container {
-    padding: 40px;
-    font-family: Arial, Helvetica, sans-serif;
+﻿/* Page Layout */
+.dashboard-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px 60px;
+    background: linear-gradient(135deg,#f3f5f9,#e6ebf2);
 }
 
+/* Title */
+
 .title {
-    margin-bottom: 25px;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
 }
+
+/* Action Buttons */
 
 .action-buttons {
     display: flex;
     gap: 15px;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 }
 
+/* Buttons */
+
 .btn {
-    padding: 10px 18px;
-    border: none;
-    background: #e5e5e5;
-    border-radius: 6px;
-    cursor: pointer;
+    padding: 12px 20px;
     font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background: #e53935;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
     .btn:hover {
-        background: #d6d6d6;
+        background: #d32f2f;
     }
 
-    .btn.primary {
-        background: #1976d2;
-        color: white;
-    }
+/* Table Container */
 
 .table-container {
-    margin-top: 10px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    max-width: 900px;
 }
+
+    /* Section Title */
+
+    .table-container h2 {
+        margin-bottom: 15px;
+        font-size: 22px;
+        color: #333;
+    }
+
+/* Table */
 
 .import-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px;
 }
 
-    .import-table th,
-    .import-table td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
+    /* Table Header */
 
     .import-table th {
-        background: #f4f4f4;
+        text-align: left;
+        background: #f4f6f9;
+        padding: 12px;
+        border-bottom: 2px solid #e0e0e0;
     }
 
-.status.completed {
-    color: green;
-    font-weight: bold;
+    /* Table Rows */
+
+    .import-table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Row Hover */
+
+    .import-table tbody tr:hover {
+        background: #fafafa;
+    }
+
+/* Status Colors */
+
+.status {
+    font-weight: 500;
 }
 
-.status.running {
-    color: #e68900;
-    font-weight: bold;
-}
+    .status.completed {
+        color: #2e7d32;
+    }
 
-.status.failed {
-    color: red;
-    font-weight: bold;
+    .status.running {
+        color: #ef6c00;
+    }
+
+    .status.failed {
+        color: #c62828;
+    }
+
+/* Responsive */
+
+@media (max-width:768px) {
+
+    .dashboard-container {
+        padding: 25px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .table-container {
+        width: 100%;
+    }
 }
