@@ -5,7 +5,7 @@ function Upload() {
 
     const [fileName, setFileName] = useState("");
     const [file, setFile] = useState(null);
-
+    const [selectedMapped, setSelectedMapped] = useState(null);
     const [selectedHeader, setSelectedHeader] = useState(null);
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [mappedColumns, setMappedColumns] = useState([]);
@@ -137,6 +137,22 @@ function Upload() {
         setSelectedProperty(null);
     };
 
+    const handleUnmap = () => {
+
+        if (!selectedMapped) return;
+
+        const updatedMappings = mappedColumns.filter(
+            (map) => map !== selectedMapped
+        );
+
+        setMappedColumns(updatedMappings);
+
+        // Add values back to lists
+        setExcelHeaders([...excelHeaders, selectedMapped.header]);
+        setArasProperties([...arasProperties, selectedMapped.property]);
+
+        setSelectedMapped(null);
+    };
 
     return (
 
@@ -229,12 +245,9 @@ function Upload() {
 
                     <div className="mapping-middle">
 
-                        <button
-                            className="map-btn"
-                            onClick={handleMap}
-                        >
-                            Map →
-                        </button>
+                        <button className="map-btn" onClick={handleMap} disabled={!selectedHeader || !selectedProperty}>Map →</button>
+
+                        <button className="unmap-btn" onClick={handleUnmap} disabled={!selectedMapped}>← Unmap</button>
 
                     </div>
 
@@ -270,7 +283,12 @@ function Upload() {
 
                         {mappedColumns.map((map, index) => (
 
-                            <div key={index} className="mapped-item">
+                            <div
+                                key={index}
+                                className={`mapped-item ${selectedMapped === map ? "selected" : ""
+                                    }`}
+                                onClick={() => setSelectedMapped(map)}
+                            >
 
                                 {map.header} → {map.property}
 

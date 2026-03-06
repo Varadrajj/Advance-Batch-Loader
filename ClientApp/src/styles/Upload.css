@@ -225,8 +225,10 @@
 
 .mapping-middle {
     display: flex;
+    flex-direction: column; /* stack buttons vertically */
     align-items: center;
     justify-content: center;
+    gap: 10px; /* space between buttons */
 }
 
 .map-btn {
@@ -237,6 +239,7 @@
     border-radius: 6px;
     cursor: pointer;
     font-weight: 500;
+    width:110px
 }
 
     .map-btn:hover {
@@ -251,4 +254,23 @@
     background: #e8f5e9;
     border: 1px solid #c8e6c9;
     border-radius: 6px;
+}
+
+.unmap-btn {
+    background: #5c5c5c;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 110px;
+}
+
+    .unmap-btn:hover {
+        background: #3f3f3f;
+    }
+
+.mapped-item.selected {
+    background: #ffe0e0;
+    border: 1px solid #e53935;
 }
