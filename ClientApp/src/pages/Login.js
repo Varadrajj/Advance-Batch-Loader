@@ -62,7 +62,7 @@ function Login() {
             }
 
         } catch (err) {
-            alert("Connection Failed");
+            alert("Connection Failed: " + err.message);
         }
 
     };
