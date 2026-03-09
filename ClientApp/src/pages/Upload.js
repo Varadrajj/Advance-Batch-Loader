@@ -11,6 +11,9 @@ function Upload() {
     const [mappedColumns, setMappedColumns] = useState([]);
 
     const [itemType, setItemType] = useState("");
+    const [excelHeaders, setExcelHeaders] = useState([]);
+
+    const [arasProperties, setArasProperties] = useState([]);
 
     const itemTypes = [
         "Part",
@@ -18,23 +21,37 @@ function Upload() {
         "CAD Document"
     ];
 
-    const [excelHeaders, setExcelHeaders] = useState([
-        "item_number",
-        "name",
-        "description",
-        "weight",
-        "classification"
-    ]);
+    const handleItemTypeChange = async (value) => {
 
-    const [arasProperties, setArasProperties] = useState([
-        "item_number",
-        "name",
-        "description",
-        "state",
-        "classification",
-        "weight"
-    ]);
+        setItemType(value);
 
+        const connection = JSON.parse(localStorage.getItem("connection"));
+
+        try {
+
+            const response = await fetch(
+                `https://localhost:7110/api/aras/properties?itemType=${value}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(connection)
+                }
+            );
+
+            const properties = await response.json();
+
+            console.log("Aras Properties:", properties);
+
+            setArasProperties(properties);
+
+        } catch (err) {
+
+            console.error("Property fetch error", err);
+
+        }
+    };
 
 
     // Upload Excel
@@ -101,22 +118,6 @@ function Upload() {
     };
 
 
-    // When ItemType selected
-    const handleItemTypeChange = (value) => {
-
-        setItemType(value);
-
-        // Static properties for now
-        setArasProperties([
-            "item_number",
-            "name",
-            "description",
-            "state",
-            "classification",
-            "weight"
-        ]);
-    };
-
 
     // Map columns
     const handleMap = () => {
@@ -124,14 +125,24 @@ function Upload() {
         if (!selectedHeader || !selectedProperty) return;
 
         const newMapping = {
+
             header: selectedHeader,
             property: selectedProperty
         };
 
         setMappedColumns([...mappedColumns, newMapping]);
 
-        setExcelHeaders(excelHeaders.filter(h => h !== selectedHeader));
-        setArasProperties(arasProperties.filter(p => p !== selectedProperty));
+        setExcelHeaders(
+            excelHeaders.filter(
+                h => h.columnIndex !== selectedHeader.columnIndex
+            )
+        );
+
+        setArasProperties(
+            arasProperties.filter(
+                p => p !== selectedProperty
+            )
+        );
 
         setSelectedHeader(null);
         setSelectedProperty(null);
@@ -153,6 +164,8 @@ function Upload() {
 
         setSelectedMapped(null);
     };
+
+
 
     return (
 
@@ -229,10 +242,10 @@ function Upload() {
 
                             <div
                                 key={index}
-                                className={`mapping-item ${selectedHeader === header ? "selected" : ""}`}
+                                className={`mapping-item ${selectedHeader?.columnIndex === header.columnIndex ? "selected" : ""}`}
                                 onClick={() => setSelectedHeader(header)}
                             >
-                                {header}
+                                {header.columnName}
                             </div>
 
                         ))}
@@ -263,10 +276,10 @@ function Upload() {
 
                             <div
                                 key={index}
-                                className={`mapping-item ${selectedProperty === prop ? "selected" : ""}`}
+                                className={`mapping-item ${selectedProperty?.name === prop.name ? "selected" : ""}`}
                                 onClick={() => setSelectedProperty(prop)}
                             >
-                                {prop}
+                                {prop.label || prop.name}
                             </div>
 
                         ))}
@@ -290,7 +303,7 @@ function Upload() {
                                 onClick={() => setSelectedMapped(map)}
                             >
 
-                                {map.header} → {map.property}
+                                {map.header.columnName} → {map.property.label || map.property.name}
 
                             </div>
 

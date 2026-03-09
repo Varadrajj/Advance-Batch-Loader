@@ -1,5 +1,6 @@
 ﻿using Advance_Batch_Loader.Models;
 using Advance_Batch_Loader.Services;
+using Aras.IOM;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Advance_Batch_Loader.Controllers
@@ -16,43 +17,41 @@ namespace Advance_Batch_Loader.Controllers
         }
 
         [HttpPost("properties")]
-        public IActionResult GetItemTypeProperties(
-            [FromBody] ConnectionRequest connection,
-            [FromQuery] string itemType)
+        public IActionResult GetProperties([FromBody] ConnectionRequest request, [FromQuery] string itemType)
         {
             try
             {
-                var inn = _connection.Connect(connection);
+                // DEBUG LINES
+                Console.WriteLine("ItemType: " + itemType);
+                Console.WriteLine("ServerUrl: " + request.ServerUrl);
+                Console.WriteLine("Database: " + request.Database);
+                Console.WriteLine("Username: " + request.Username);
 
-                var aml = $@"
+                Innovator inn = _connection.Connect(request);
+
+                string aml = $@"
                 <AML>
-                  <Item type='ItemType' action='get'>
-                    <name>{itemType}</name>
-                    <Relationships>
-                      <Item type='Property' action='get'>
-                        <name />
-                        <label />
-                        <data_type />
-                      </Item>
-                    </Relationships>
-                  </Item>
+                    <Item type='Property' action='get' select='name,label'>
+                        <source_id>
+                            <Item type='ItemType' action='get'>
+                                <name>{itemType}</name>
+                            </Item>
+                        </source_id>
+                    </Item>
                 </AML>";
 
-                var result = inn.applyAML(aml);
+                Item result = inn.applyAML(aml);
 
-                var properties = new List<ArasProperty>();
+                var properties = new List<object>();
 
-                var rels = result.getRelationships("Property");
-
-                for (int i = 0; i < rels.getItemCount(); i++)
+                for (int i = 0; i < result.getItemCount(); i++)
                 {
-                    var prop = rels.getItemByIndex(i);
+                    Item prop = result.getItemByIndex(i);
 
-                    properties.Add(new ArasProperty
+                    properties.Add(new
                     {
-                        Name = prop.getProperty("name"),
-                        Label = prop.getProperty("label"),
-                        DataType = prop.getProperty("data_type")
+                        name = prop.getProperty("name"),
+                        label = prop.getProperty("label")
                     });
                 }
 
@@ -60,7 +59,7 @@ namespace Advance_Batch_Loader.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
         }
     }
