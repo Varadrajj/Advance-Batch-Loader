@@ -1,32 +1,30 @@
 ﻿/* Page Layout */
 
 .upload-container {
-    width: 100%;
+    max-width: 100%;
     min-height: 100vh;
-    padding: 40px 60px;
+    padding: 10px 40px;
     background: linear-gradient(135deg,#f3f5f9,#e6ebf2);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
     /* Page Title */
 
     .upload-container h2 {
         font-size: 30px;
         font-weight: 600;
-        margin-bottom: 30px;
+        bottom: 5px;
         color: #333;
     }
-
 /* Drag Drop Box */
 
 .drop-zone {
-    width: 600px;
+    width: 40%;
     background: white;
     border: 2px dashed #dcdcdc;
     border-radius: 10px;
-    padding: 40px;
+    padding: 20px;
     text-align: center;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     transition: all 0.2s ease;
@@ -42,7 +40,6 @@
         color: #555;
         margin-bottom: 8px;
     }
-
     /* File Input */
 
     .drop-zone input {
@@ -52,7 +49,6 @@
         border: 1px solid #ccc;
         cursor: pointer;
     }
-
 /* Selected file */
 
 .file-name {
@@ -61,11 +57,10 @@
     font-weight: 500;
     color: #333;
 }
-
 /* ItemType Section */
 
 .itemtype-section {
-    width: 600px;
+    width: 40%;
     margin-top: 25px;
     display: flex;
     flex-direction: column;
@@ -90,18 +85,16 @@
             border-color: #e53935;
             box-shadow: 0 0 3px rgba(229,57,53,0.4);
         }
-
 /* Mapping Section */
 
 .mapping-section {
-    width: 900px;
+    width: 90%;
     margin-top: 40px;
     background: white;
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
-
     /* Mapping Title */
 
     .mapping-section h3 {
@@ -109,13 +102,32 @@
         margin-bottom: 20px;
     }
 
-/* Mapping Table */
+.mapping-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
 
+.import-btn{ 
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.import-btn:hover {
+    background: #1565c0;
+}
+
+/* Mapping Table */
 .mapping-table {
     width: 100%;
     border-collapse: collapse;
 }
-
     /* Table Header */
 
     .mapping-table th {
@@ -124,20 +136,17 @@
         background: #f4f6f9;
         border-bottom: 2px solid #e0e0e0;
     }
-
     /* Table Rows */
 
     .mapping-table td {
         padding: 12px;
         border-bottom: 1px solid #eee;
     }
-
     /* Row hover */
 
     .mapping-table tbody tr:hover {
         background: #fafafa;
     }
-
     /* Dropdown inside table */
 
     .mapping-table select {
@@ -146,13 +155,10 @@
         border: 1px solid #ccc;
         width: 100%;
     }
-
 /* Responsive */
 
 @media (max-width:900px) {
-
-    .drop-zone,
-    .itemtype-section {
+    .drop-zone, .itemtype-section {
         width: 90%;
     }
 
@@ -160,7 +166,6 @@
         width: 95%;
     }
 }
-
 /* Mapping Section */
 
 .mapping-section {
@@ -170,39 +175,61 @@
     border-radius: 10px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
-
 /* Container holding all 3 columns */
 
 .mapping-container {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 25px;
 }
-
 /* Each column */
 
 .mapping-column {
     flex: 1;
+    min-width: 250px;
     background: #f8f9fb;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
 }
-
     /* Column title */
 
     .mapping-column h4 {
         margin-bottom: 15px;
         font-size: 16px;
         font-weight: 600;
+        position: sticky;
+        top: 0;
+        background: #f8f9fb;
+        padding-bottom: 8px;
     }
 
+.mapping-list {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+    .mapping-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .mapping-list::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+    }
+
+        .mapping-column::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
 /* Header / property items */
 
 .mapping-item {
-    padding: 10px;
-    margin-bottom: 8px;
+    padding: 6px;
+    margin-bottom: 5px;
     border: 1px solid #ddd;
     border-radius: 6px;
     background: white;
@@ -213,14 +240,12 @@
     .mapping-item:hover {
         border-color: #e53935;
     }
-
     /* Selected item */
 
     .mapping-item.selected {
         background: #ffecec;
         border-color: #e53935;
     }
-
 /* Middle map button */
 
 .mapping-middle {
@@ -245,12 +270,11 @@
     .map-btn:hover {
         background: #c62828;
     }
-
 /* Mapped column items */
 
 .mapped-item {
-    padding: 10px;
-    margin-bottom: 8px;
+    padding: 6px;
+    margin-bottom: 5px;
     background: #e8f5e9;
     border: 1px solid #c8e6c9;
     border-radius: 6px;
@@ -273,4 +297,58 @@
 .mapped-item.selected {
     background: #ffe0e0;
     border: 1px solid #e53935;
+}
+
+/* Logs Section */
+
+.logs-section {
+    width: 90%;
+    margin-top: 35px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Logs header */
+
+.logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Export button */
+
+.export-btn {
+    background: #1976d2;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+    .export-btn:hover {
+        background: #1565c0;
+    }
+
+
+/* Status colors */
+
+.log-error {
+    color: #e53935;
+    font-weight: 600;
+}
+
+.log-warning {
+    color: #f9a825;
+    font-weight: 600;
+}
+
+.log-success {
+    color: #2e7d32;
+    font-weight: 600;
 }

@@ -22,7 +22,7 @@ function Upload() {
     ];
 
     const handleItemTypeChange = async (value) => {
-
+   
         setItemType(value);
 
         const connection = JSON.parse(localStorage.getItem("connection"));
@@ -132,17 +132,7 @@ function Upload() {
 
         setMappedColumns([...mappedColumns, newMapping]);
 
-        setExcelHeaders(
-            excelHeaders.filter(
-                h => h.columnIndex !== selectedHeader.columnIndex
-            )
-        );
-
-        setArasProperties(
-            arasProperties.filter(
-                p => p !== selectedProperty
-            )
-        );
+        
 
         setSelectedHeader(null);
         setSelectedProperty(null);
@@ -158,9 +148,7 @@ function Upload() {
 
         setMappedColumns(updatedMappings);
 
-        // Add values back to lists
-        setExcelHeaders([...excelHeaders, selectedMapped.header]);
-        setArasProperties([...arasProperties, selectedMapped.property]);
+       
 
         setSelectedMapped(null);
     };
@@ -203,7 +191,7 @@ function Upload() {
 
             <div className="itemtype-section">
 
-                <label>Select ItemType</label>
+                {/*<label>Select ItemType</label>*/}
 
                 <select
                     value={itemType}
@@ -228,7 +216,15 @@ function Upload() {
 
             <div className="mapping-section">
 
-                <h3>Column Mapping</h3>
+                <div className="mapping-header">
+
+                    <h3>Property Mapping</h3>
+
+                    <button className="import-btn">
+                    Import Data
+                    </button>
+
+                </div>
 
                 <div className="mapping-container">
 
@@ -237,6 +233,8 @@ function Upload() {
                     <div className="mapping-column">
 
                         <h4>Excel Headers</h4>
+
+                        <div className="mapping-list">
 
                         {excelHeaders.map((header, index) => (
 
@@ -250,11 +248,12 @@ function Upload() {
 
                         ))}
 
+                        </div>
                     </div>
 
 
 
-                    {/* Map Button */}
+                    {/* Maping Buttons */}
 
                     <div className="mapping-middle">
 
@@ -272,6 +271,8 @@ function Upload() {
 
                         <h4>Aras Properties</h4>
 
+                            <div className="mapping-list">
+
                         {arasProperties.map((prop, index) => (
 
                             <div
@@ -284,6 +285,7 @@ function Upload() {
 
                         ))}
 
+                        </div>
                     </div>
 
 
@@ -293,6 +295,8 @@ function Upload() {
                     <div className="mapping-column mapped">
 
                         <h4>Mapped Columns</h4>
+
+                        <div className="mapping-list">
 
                         {mappedColumns.map((map, index) => (
 
@@ -309,7 +313,30 @@ function Upload() {
 
                         ))}
 
+                        </div>
                     </div>
+
+                </div>
+
+            </div>
+
+            {/* Import Logs Section */}
+
+            <div className="logs-section">
+
+                <div className="logs-header">
+
+                    <h3>Loader Logs</h3>
+
+                    <button className="export-btn">
+                        Export Logs
+                    </button>
+
+                </div>
+
+                <div className="logs-table-container">
+
+                    THIS IS TEST DATA FOR LOGS
 
                 </div>
 
