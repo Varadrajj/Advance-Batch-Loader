@@ -158,11 +158,10 @@ function Upload() {
     return (
 
         <div className="upload-container">
-
             <h2>Upload Excel File</h2>
 
             {/* Upload Section */}
-
+            <div className="upload-top-section">
             <div
                 className="drop-zone"
                 onDrop={handleDrop}
@@ -209,8 +208,7 @@ function Upload() {
                 </select>
 
             </div>
-
-
+        </div>
 
             {/* Mapping Section */}
 
