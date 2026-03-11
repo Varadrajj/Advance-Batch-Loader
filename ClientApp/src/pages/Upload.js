@@ -5,12 +5,15 @@ function Upload() {
 
     const [fileName, setFileName] = useState("");
     const [file, setFile] = useState(null);
-
+    const [selectedMapped, setSelectedMapped] = useState(null);
     const [selectedHeader, setSelectedHeader] = useState(null);
     const [selectedProperty, setSelectedProperty] = useState(null);
     const [mappedColumns, setMappedColumns] = useState([]);
 
     const [itemType, setItemType] = useState("");
+    const [excelHeaders, setExcelHeaders] = useState([]);
+
+    const [arasProperties, setArasProperties] = useState([]);
 
     const itemTypes = [
         "Part",
@@ -18,23 +21,37 @@ function Upload() {
         "CAD Document"
     ];
 
-    const [excelHeaders, setExcelHeaders] = useState([
-        "item_number",
-        "name",
-        "description",
-        "weight",
-        "classification"
-    ]);
+    const handleItemTypeChange = async (value) => {
+   
+        setItemType(value);
 
-    const [arasProperties, setArasProperties] = useState([
-        "item_number",
-        "name",
-        "description",
-        "state",
-        "classification",
-        "weight"
-    ]);
+        const connection = JSON.parse(localStorage.getItem("connection"));
 
+        try {
+
+            const response = await fetch(
+                `https://localhost:7110/api/aras/properties?itemType=${value}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(connection)
+                }
+            );
+
+            const properties = await response.json();
+
+            console.log("Aras Properties:", properties);
+
+            setArasProperties(properties);
+
+        } catch (err) {
+
+            console.error("Property fetch error", err);
+
+        }
+    };
 
 
     // Upload Excel
@@ -101,22 +118,6 @@ function Upload() {
     };
 
 
-    // When ItemType selected
-    const handleItemTypeChange = (value) => {
-
-        setItemType(value);
-
-        // Static properties for now
-        setArasProperties([
-            "item_number",
-            "name",
-            "description",
-            "state",
-            "classification",
-            "weight"
-        ]);
-    };
-
 
     // Map columns
     const handleMap = () => {
@@ -124,28 +125,43 @@ function Upload() {
         if (!selectedHeader || !selectedProperty) return;
 
         const newMapping = {
+
             header: selectedHeader,
             property: selectedProperty
         };
 
         setMappedColumns([...mappedColumns, newMapping]);
 
-        setExcelHeaders(excelHeaders.filter(h => h !== selectedHeader));
-        setArasProperties(arasProperties.filter(p => p !== selectedProperty));
+        
 
         setSelectedHeader(null);
         setSelectedProperty(null);
     };
 
+    const handleUnmap = () => {
+
+        if (!selectedMapped) return;
+
+        const updatedMappings = mappedColumns.filter(
+            (map) => map !== selectedMapped
+        );
+
+        setMappedColumns(updatedMappings);
+
+       
+
+        setSelectedMapped(null);
+    };
+
+
 
     return (
 
         <div className="upload-container">
-
             <h2>Upload Excel File</h2>
 
             {/* Upload Section */}
-
+            <div className="upload-top-section">
             <div
                 className="drop-zone"
                 onDrop={handleDrop}
@@ -174,7 +190,7 @@ function Upload() {
 
             <div className="itemtype-section">
 
-                <label>Select ItemType</label>
+                {/*<label>Select ItemType</label>*/}
 
                 <select
                     value={itemType}
@@ -192,14 +208,21 @@ function Upload() {
                 </select>
 
             </div>
-
-
+        </div>
 
             {/* Mapping Section */}
 
             <div className="mapping-section">
 
-                <h3>Column Mapping</h3>
+                <div className="mapping-header">
+
+                    <h3>Property Mapping</h3>
+
+                    <button className="import-btn">
+                    Import Data
+                    </button>
+
+                </div>
 
                 <div className="mapping-container">
 
@@ -209,32 +232,32 @@ function Upload() {
 
                         <h4>Excel Headers</h4>
 
+                        <div className="mapping-list">
+
                         {excelHeaders.map((header, index) => (
 
                             <div
                                 key={index}
-                                className={`mapping-item ${selectedHeader === header ? "selected" : ""}`}
+                                className={`mapping-item ${selectedHeader?.columnIndex === header.columnIndex ? "selected" : ""}`}
                                 onClick={() => setSelectedHeader(header)}
                             >
-                                {header}
+                                {header.columnName}
                             </div>
 
                         ))}
 
+                        </div>
                     </div>
 
 
 
-                    {/* Map Button */}
+                    {/* Maping Buttons */}
 
                     <div className="mapping-middle">
 
-                        <button
-                            className="map-btn"
-                            onClick={handleMap}
-                        >
-                            Map →
-                        </button>
+                        <button className="map-btn" onClick={handleMap} disabled={!selectedHeader || !selectedProperty}>Map →</button>
+
+                        <button className="unmap-btn" onClick={handleUnmap} disabled={!selectedMapped}>← Unmap</button>
 
                     </div>
 
@@ -246,18 +269,21 @@ function Upload() {
 
                         <h4>Aras Properties</h4>
 
+                            <div className="mapping-list">
+
                         {arasProperties.map((prop, index) => (
 
                             <div
                                 key={index}
-                                className={`mapping-item ${selectedProperty === prop ? "selected" : ""}`}
+                                className={`mapping-item ${selectedProperty?.name === prop.name ? "selected" : ""}`}
                                 onClick={() => setSelectedProperty(prop)}
                             >
-                                {prop}
+                                {prop.label || prop.name}
                             </div>
 
                         ))}
 
+                        </div>
                     </div>
 
 
@@ -268,17 +294,47 @@ function Upload() {
 
                         <h4>Mapped Columns</h4>
 
+                        <div className="mapping-list">
+
                         {mappedColumns.map((map, index) => (
 
-                            <div key={index} className="mapped-item">
+                            <div
+                                key={index}
+                                className={`mapped-item ${selectedMapped === map ? "selected" : ""
+                                    }`}
+                                onClick={() => setSelectedMapped(map)}
+                            >
 
-                                {map.header} → {map.property}
+                                {map.header.columnName} → {map.property.label || map.property.name}
 
                             </div>
 
                         ))}
 
+                        </div>
                     </div>
+
+                </div>
+
+            </div>
+
+            {/* Import Logs Section */}
+
+            <div className="logs-section">
+
+                <div className="logs-header">
+
+                    <h3>Loader Logs</h3>
+
+                    <button className="export-btn">
+                        Export Logs
+                    </button>
+
+                </div>
+
+                <div className="logs-table-container">
+
+                    THIS IS TEST DATA FOR LOGS
 
                 </div>
 
