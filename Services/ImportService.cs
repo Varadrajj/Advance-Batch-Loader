@@ -34,7 +34,7 @@ namespace Advance_Batch_Loader.Services
                     existingParts[p.Key] = p.Value;
             }
 
-            CreateBomRelationships(inn, rows, existingParts);
+            //CreateBomRelationships(inn, rows, existingParts);
         }
 
         private Dictionary<string, string> GetExistingParts(
@@ -102,7 +102,14 @@ namespace Advance_Batch_Loader.Services
 
                 sb.Append("</AML>");
 
-                inn.applyAML(sb.ToString());
+                Console.WriteLine(sb.ToString());
+
+                Item result = inn.applyAML(sb.ToString());
+
+                if (result.isError())
+                {
+                    throw new Exception(result.getErrorString());
+                }
             }
         }
 

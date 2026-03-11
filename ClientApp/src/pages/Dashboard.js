@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import "../styles/Dashboard.css";
+import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
@@ -25,31 +26,11 @@ function Dashboard() {
     }
   ];
 
-  return (
+    return (
+        <div>
+        <Navbar title="Advanced Batch Loader" />
     <div className="dashboard-container">
 
-      <h1 className="title">Advanced Batch Loader</h1>
-
-      {/* Action Buttons */}
-
-      <div className="action-buttons">
-
-              <button
-                  className="btn"
-                  onClick={() => navigate("/upload")}
-              >
-                  New Import
-              </button>
-
-        <button className="btn">
-          Import History
-        </button>
-
-        <button className="btn">
-          Templates
-        </button>
-
-      </div>
 
       {/* Recent Imports Table */}
 
@@ -88,7 +69,7 @@ function Dashboard() {
         </table>
 
       </div>
-
+            </div>
     </div>
   );
 }

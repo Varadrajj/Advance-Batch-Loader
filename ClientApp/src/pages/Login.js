@@ -104,6 +104,15 @@ function Login() {
         }
     };
 
+    const handleCancel = () => {
+
+        setServerUrl("");
+        setDatabase("");
+        setUsername("");
+        setPassword("");
+
+    };
+
     return (
 
         <div className="login-container">
@@ -151,9 +160,23 @@ function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                <button onClick={handleLogin}>
-                    Login
-                </button>
+                <div className="button-group">
+
+                    <button
+                        className="login-btn"
+                        onClick={handleLogin}
+                    >
+                        Login
+                    </button>
+
+                    <button
+                        className="cancel-btn"
+                        onClick={handleCancel}
+                    >
+                        Cancel
+                    </button>
+
+                </div>
 
             </div>
 

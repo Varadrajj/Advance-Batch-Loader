@@ -45,12 +45,11 @@
     .login-card input,
     .login-card select {
         width: 100%;
-        padding: 11px 12px;
+        padding: 12px;
         font-size: 14px;
-        border: 1px solid #dcdcdc;
         border-radius: 6px;
-        transition: all 0.2s ease;
-        background: #fff;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
     }
 
         /* Input focus */
@@ -62,26 +61,41 @@
             box-shadow: 0 0 3px rgba(229,57,53,0.4);
         }
 
-    /* Login button */
+.button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
 
-    .login-card button {
-        margin-top: 25px;
-        padding: 12px;
-        font-size: 15px;
-        font-weight: 500;
-        border: none;
-        border-radius: 6px;
-        background: #e53935;
-        color: white;
-        cursor: pointer;
-        transition: all 0.2s ease;
+.login-btn {
+    flex: 1;
+    background: #e53935;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+    .login-btn:hover {
+        background: #c62828;
     }
 
-        /* Button hover */
+.cancel-btn {
+    flex: 1;
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
 
-        .login-card button:hover {
-            background: #d32f2f;
-        }
+    .cancel-btn:hover {
+        background: #545b62;
+    }
 
 /* Responsive */
 
