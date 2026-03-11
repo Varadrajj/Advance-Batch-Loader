@@ -222,7 +222,7 @@ function Upload() {
             <h2>Upload Excel File</h2>
 
             {/* Upload Section */}
-
+            <div className="upload-top-section">
             <div
                 className="drop-zone"
                 onDrop={handleDrop}
@@ -266,7 +266,9 @@ function Upload() {
                         </option>
                     ))}
 
-                </select>
+                    </select>
+
+                </div>
 
             </div>
 
