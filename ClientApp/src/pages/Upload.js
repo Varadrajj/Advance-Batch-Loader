@@ -132,17 +132,7 @@ function Upload() {
 
         setMappedColumns([...mappedColumns, newMapping]);
 
-        setExcelHeaders(
-            excelHeaders.filter(
-                h => h.columnIndex !== selectedHeader.columnIndex
-            )
-        );
 
-        setArasProperties(
-            arasProperties.filter(
-                p => p !== selectedProperty
-            )
-        );
 
         setSelectedHeader(null);
         setSelectedProperty(null);
@@ -158,11 +148,69 @@ function Upload() {
 
         setMappedColumns(updatedMappings);
 
-        // Add values back to lists
-        setExcelHeaders([...excelHeaders, selectedMapped.header]);
-        setArasProperties([...arasProperties, selectedMapped.property]);
+
 
         setSelectedMapped(null);
+    };
+
+    const handleImport = async () => {
+
+        if (!file) {
+            alert("Please upload Excel file first");
+            return;
+        }
+
+        if (mappedColumns.length === 0) {
+            alert("Please map columns before importing");
+            return;
+        }
+
+        try {
+
+            const connection = JSON.parse(localStorage.getItem("connection"));
+
+            // Convert mapping to backend format
+            const mappings = mappedColumns.map(m => ({
+                columnIndex: m.header.columnIndex,
+                propertyName: m.property.name
+            }));
+
+            const requestPayload = {
+                mappings: mappings,
+                connection: connection,
+                itemType: itemType
+            };
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+            formData.append("requestJson", JSON.stringify(requestPayload));
+
+            const response = await fetch(
+                "https://localhost:7110/api/import/bom",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+            const result = await response.json();
+
+            console.log("Import Result:", result);
+
+            if (!response.ok) {
+                alert("Import failed: " + result.error);
+                return;
+            }
+
+            alert("Import completed successfully");
+
+        } catch (err) {
+
+            console.error("Import error:", err);
+            alert("Import failed");
+
+        }
     };
 
 
@@ -203,7 +251,7 @@ function Upload() {
 
             <div className="itemtype-section">
 
-                <label>Select ItemType</label>
+                {/*<label>Select ItemType</label>*/}
 
                 <select
                     value={itemType}
@@ -228,7 +276,19 @@ function Upload() {
 
             <div className="mapping-section">
 
-                <h3>Column Mapping</h3>
+                <div className="mapping-header">
+
+                    <h3>Property Mapping</h3>
+
+                    <button
+                        className="import-btn"
+                        onClick={handleImport}
+                        disabled={mappedColumns.length === 0}
+                    >
+                        Import Data
+                    </button>
+
+                </div>
 
                 <div className="mapping-container">
 
@@ -238,23 +298,26 @@ function Upload() {
 
                         <h4>Excel Headers</h4>
 
-                        {excelHeaders.map((header, index) => (
+                        <div className="mapping-list">
 
-                            <div
-                                key={index}
-                                className={`mapping-item ${selectedHeader?.columnIndex === header.columnIndex ? "selected" : ""}`}
-                                onClick={() => setSelectedHeader(header)}
-                            >
-                                {header.columnName}
-                            </div>
+                            {excelHeaders.map((header, index) => (
 
-                        ))}
+                                <div
+                                    key={index}
+                                    className={`mapping-item ${selectedHeader?.columnIndex === header.columnIndex ? "selected" : ""}`}
+                                    onClick={() => setSelectedHeader(header)}
+                                >
+                                    {header.columnName}
+                                </div>
 
+                            ))}
+
+                        </div>
                     </div>
 
 
 
-                    {/* Map Button */}
+                    {/* Maping Buttons */}
 
                     <div className="mapping-middle">
 
@@ -272,18 +335,21 @@ function Upload() {
 
                         <h4>Aras Properties</h4>
 
-                        {arasProperties.map((prop, index) => (
+                        <div className="mapping-list">
 
-                            <div
-                                key={index}
-                                className={`mapping-item ${selectedProperty?.name === prop.name ? "selected" : ""}`}
-                                onClick={() => setSelectedProperty(prop)}
-                            >
-                                {prop.label || prop.name}
-                            </div>
+                            {arasProperties.map((prop, index) => (
 
-                        ))}
+                                <div
+                                    key={index}
+                                    className={`mapping-item ${selectedProperty?.name === prop.name ? "selected" : ""}`}
+                                    onClick={() => setSelectedProperty(prop)}
+                                >
+                                    {prop.label || prop.name}
+                                </div>
 
+                            ))}
+
+                        </div>
                     </div>
 
 
@@ -294,22 +360,47 @@ function Upload() {
 
                         <h4>Mapped Columns</h4>
 
-                        {mappedColumns.map((map, index) => (
+                        <div className="mapping-list">
 
-                            <div
-                                key={index}
-                                className={`mapped-item ${selectedMapped === map ? "selected" : ""
-                                    }`}
-                                onClick={() => setSelectedMapped(map)}
-                            >
+                            {mappedColumns.map((map, index) => (
 
-                                {map.header.columnName} → {map.property.label || map.property.name}
+                                <div
+                                    key={index}
+                                    className={`mapped-item ${selectedMapped === map ? "selected" : ""
+                                        }`}
+                                    onClick={() => setSelectedMapped(map)}
+                                >
 
-                            </div>
+                                    {map.header.columnName} → {map.property.label || map.property.name}
 
-                        ))}
+                                </div>
 
+                            ))}
+
+                        </div>
                     </div>
+
+                </div>
+
+            </div>
+
+            {/* Import Logs Section */}
+
+            <div className="logs-section">
+
+                <div className="logs-header">
+
+                    <h3>Loader Logs</h3>
+
+                    <button className="export-btn">
+                        Export Logs
+                    </button>
+
+                </div>
+
+                <div className="logs-table-container">
+
+                    THIS IS TEST DATA FOR LOGS
 
                 </div>
 

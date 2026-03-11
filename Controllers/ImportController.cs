@@ -27,25 +27,41 @@ namespace Advance_Batch_Loader.Controllers
         }
 
         [HttpPost("bom")]
-        public async Task<IActionResult> ImportBom(
-            IFormFile file,
-            [FromForm] string requestJson)
+        public IActionResult ImportBom(
+    IFormFile file,
+    [FromForm] string requestJson)
         {
-            var request = JsonConvert.DeserializeObject<ImportRequest>(requestJson);
-
-            using var stream = file.OpenReadStream();
-
-            var (bomData, parts) = _excelService.ParseExcel(stream, request.Mappings);
-
-            var inn = _connectionService.Connect(request.Connection);
-
-            _importService.ImportBom(inn, bomData, parts);
-
-            return Ok(new
+            try
             {
-                message = "Import completed",
-                rows = bomData.Count
-            });
+                var request = JsonConvert.DeserializeObject<ImportRequest>(requestJson);
+
+                using var stream = file.OpenReadStream();
+
+                // Parse Excel rows based on mapping
+                var rows = _excelService.ParseExcel(stream, request.Mappings);
+
+                // Connect to Aras
+                var inn = _connectionService.Connect(request.Connection);
+
+                // Import items
+                _importService.ImportItems(
+                    inn,
+                    request.ItemType,
+                    rows);
+
+                return Ok(new
+                {
+                    message = "Import completed",
+                    rows = rows.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    error = ex.ToString()
+                });
+            }
         }
 
         [HttpPost("generic")]
