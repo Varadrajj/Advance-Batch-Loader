@@ -28,8 +28,8 @@ namespace Advance_Batch_Loader.Controllers
 
         [HttpPost("bom")]
         public IActionResult ImportBom(
-    IFormFile file,
-    [FromForm] string requestJson)
+            IFormFile file,
+            [FromForm] string requestJson)
         {
             try
             {
